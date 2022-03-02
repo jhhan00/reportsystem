@@ -30,9 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("admin")
-                .password(passwordEncoder().encode("1234")).roles("ADMIN")
+                .password(passwordEncoder().encode("qwer")).roles("ADMIN")
                 .and()
                 .withUser("guest")
-                .password(passwordEncoder().encode("1234")).roles("GUEST");
+                .password(passwordEncoder().encode("qwer")).roles("GUEST");
     }
 }
