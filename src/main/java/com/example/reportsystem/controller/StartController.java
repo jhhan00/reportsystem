@@ -31,8 +31,9 @@ public class StartController {
     }
 
     @RequestMapping("/home")
-    public String home() {
-        return "base/home";
+    public String home(HttpServletRequest request, Authentication auth) {
+        if(commonService.isAuthenticated(request, auth)) return "base/home";
+        return "redirect:/logIn";
     }
 
     @PostMapping("/loginProcess")
