@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class StartController {
@@ -16,17 +19,24 @@ public class StartController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping("/home")
-    public String home(Authentication auth) {
-        if(commonService.isAuthenticated(auth))
-            return "base/home";
-        else
-            return "redirect:/login";
+    @RequestMapping({"/", "/login"})
+    public String login(HttpServletRequest request, Authentication auth) {
+        if(commonService.isAuthenticated(request, auth)) return "redirect:/home";
+        return "redirect:/logIn";
     }
 
-    @RequestMapping({"/", "/login"})
-    public String login(Authentication auth) {
-        if(commonService.isAuthenticated(auth)) return "base/home";
-        else return "redirect:/login";
+    @RequestMapping("/logIn")
+    public String log_in() {
+        return "/base/login";
+    }
+
+    @RequestMapping("/home")
+    public String home() {
+        return "base/home";
+    }
+
+    @PostMapping("/loginProcess")
+    public String login_process() {
+        return "redirect:/home";
     }
 }
