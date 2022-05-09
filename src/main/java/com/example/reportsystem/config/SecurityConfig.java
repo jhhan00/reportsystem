@@ -6,27 +6,32 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
+        http
+                .authorizeRequests()
+                    .antMatchers("/**").permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
-                .formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
-                .defaultSuccessUrl("/home")
+                    .csrf().disable()
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/loginProcess")
+                    .defaultSuccessUrl("/")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                    .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 
     @Override
@@ -35,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin")
                 .password(passwordEncoder().encode("qwer")).roles("ADMIN")
                 .and()
-                .withUser("guest")
-                .password(passwordEncoder().encode("qwer")).roles("GUEST");
+                .withUser("user")
+                .password(passwordEncoder().encode("qwer")).roles("USER");
     }
 }
