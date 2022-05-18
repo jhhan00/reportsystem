@@ -14,30 +14,27 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class StartController {
 
-    @Autowired
-    private CommonService commonService;
+    private final CommonService commonService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping({"/", "/login"})
-    public String login(HttpServletRequest request, Authentication auth) {
-        if(commonService.isAuthenticated(request, auth)) return "redirect:/home";
-        return "redirect:/logIn";
+    @Autowired
+    public StartController(CommonService commonService) {
+        this.commonService = commonService;
     }
 
-    @RequestMapping("/logIn")
-    public String log_in() {
+    @RequestMapping("/")
+    public String login(HttpServletRequest request, Authentication auth) {
+        logger.info("/ , 가장 기본이 되는 페이지 & 로그인 이후");
+        if(commonService.isAuthenticated(request, auth)) return "base/home";
+        return "redirect:/login";
+    }
+
+    @RequestMapping("/login")
+    public String log_in(HttpServletRequest request, Authentication auth) {
+        logger.info("log_in , 로그인이 필요할 경우");
+        if(commonService.isAuthenticated(request, auth)) return "redirect:/";
         return "/base/login";
     }
 
-    @RequestMapping("/home")
-    public String home(HttpServletRequest request, Authentication auth) {
-        if(commonService.isAuthenticated(request, auth)) return "base/home";
-        return "redirect:/logIn";
-    }
-
-    @PostMapping("/loginProcess")
-    public String login_process() {
-        return "redirect:/home";
-    }
 }

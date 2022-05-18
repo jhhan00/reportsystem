@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 
 @Service
 public class CommonService {
@@ -15,6 +16,11 @@ public class CommonService {
 
     public boolean isAuthenticated(HttpServletRequest request, Authentication auth) {
         HttpSession httpSession = request.getSession();
+        Enumeration<String> keys = httpSession.getAttributeNames();
+        while(keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            logger.info(key + " => " + httpSession.getAttribute(key));
+        }
         logger.info("auth = " + auth);
 
         return auth != null;
