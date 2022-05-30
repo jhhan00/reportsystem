@@ -21,11 +21,19 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("login success");
 
+        String id = request.getParameter("username");
+        String pw = request.getParameter("password");
+        logger.info("id = " + id + " , pw = " + pw);
+
+        sessionRemoveAttribute(request);
+
+        response.sendRedirect("/");
+    }
+
+    public void sessionRemoveAttribute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if(session != null) {
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);    // 이전에 로그인 실패한 이력이 있다면 session에서 실패 이력 제거
         }
-
-        response.sendRedirect("/");
     }
 }
