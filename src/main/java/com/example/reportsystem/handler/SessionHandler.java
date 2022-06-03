@@ -2,11 +2,15 @@ package com.example.reportsystem.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class SessionHandler {
@@ -18,12 +22,14 @@ public class SessionHandler {
      * @param authentication
      * @return
      */
-    public boolean isLogined(Authentication authentication) {
-        logger.info("authentication.getAuthorities = " + authentication.getAuthorities());
-        logger.info("authentication.getDetails     = " + authentication.getDetails());
-        logger.info("authentication.getName        = " + authentication.getName());
-        logger.info("authentication.getPrincipal   = " + authentication.getPrincipal());
-        logger.info("authentication.getCredentials = " + authentication.getCredentials());
+    public boolean isLogin(Authentication authentication) {
+        if(authentication != null) {
+            logger.info("authentication.getAuthorities = " + authentication.getAuthorities());
+            logger.info("authentication.getDetails     = " + authentication.getDetails());
+            logger.info("authentication.getName        = " + authentication.getName());
+            logger.info("authentication.getPrincipal   = " + authentication.getPrincipal());
+            logger.info("authentication.getCredentials = " + authentication.getCredentials());
+        }
         return authentication != null;
     }
 
@@ -39,10 +45,4 @@ public class SessionHandler {
         return session.getAttribute(sessionId) != null;
     }
 
-    public void setSessionInfo(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-
-
-    }
 }
